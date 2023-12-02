@@ -3,16 +3,23 @@
     <head>
         <style>
             body {
-              margin: 0px;
-              padding: 0px;
-              overflow: hidden;
+                background-color: black;
+                margin: 0px;
+                padding: 0px;
+                overflow: hidden;
+            }
+            canvas {
+                image-rendering: -moz-crisp-edges;
+                image-rendering: -webkit-crisp-edges;
+                image-rendering: pixelated;
+                image-rendering: crisp-edges;
             }
         </style>
         <title>JavaScript Browser Game</title>
     </head>
 
     <body>
-        <canvas id="game_window" width="1400" height="801"> </canvas>
+        <canvas id="game_window" width="1400" height="800"> </canvas>
         <script type="text/javascript" src="Base.js"> </script>
     </body>
 </html>
