@@ -2,7 +2,7 @@ console.log("'Classes.js' loaded.");
 
 class Player {
     constructor() {
-        this.image = player_image;
+        this.image = PLAYER_IMAGE;
         this.width = FRAME_WIDTH * SF; this.height = FRAME_HEIGHT * SF;
         this.x = WIDTH/2 - this.width/2; this.y = HEIGHT/2 - this.height/2;
 
@@ -11,7 +11,7 @@ class Player {
         this.S_pressed = false;
         this.A_pressed = false;
         this.D_pressed = false;
-        this.speed = SF;
+        this.speed = SF * 2;
     }
 
     handle_player_model(frame_counter) {
@@ -56,26 +56,33 @@ class Player {
             }
         });
 
-        if (this.W_pressed) { if (this.y > 0) {
+        if (this.W_pressed) { if (this.y > PLAYABLE_REGION[1] - this.height/2) {
             this.y -= this.speed;
-        }} else if (this.S_pressed) { if (this.y < HEIGHT - this.height) {
+        }} else if (this.S_pressed) { if (this.y < PLAYABLE_REGION[3] - this.height) {
             this.y += this.speed;
-        }} else if (this.A_pressed) { if (this.x > 0) {
+        }} else if (this.A_pressed) { if (this.x > PLAYABLE_REGION[0]) {
             this.x -= this.speed;
-        }} else if (this.D_pressed) { if (this.x < WIDTH - this.width) {
+        }} else if (this.D_pressed) { if (this.x < PLAYABLE_REGION[2] - this.width) {
             this.x += this.speed;
         }}
 
         this.handle_player_model(frame_counter);
+    }
+
+    draw(WIN) {
+        WIN.drawImage(this.image, FRAME_WIDTH * this.animation_frame[0], 
+            FRAME_HEIGHT * this.animation_frame[1], FRAME_WIDTH, FRAME_HEIGHT, 
+            this.x, this.y, this.width, this.height);
     }
 }
 
 
 class Zombie {
     constructor() {
-        this.image = zombie_image;
+        this.image = ZOMBIE_IMAGE;
         this.width = ZOMBIE_FRAME_WIDTH * SF; this.height = ZOMBIE_FRAME_HEIGHT * SF;
-        this.x = WIDTH/2 - this.width/2; this.y = HEIGHT/2 - this.height/2;
+        this.x = Math.floor(Math.random() * (PLAYABLE_REGION[2] - this.width - PLAYABLE_REGION[0] + 1)) + PLAYABLE_REGION[0];
+        this.y = Math.floor(Math.random() * (PLAYABLE_REGION[3] - this.height - PLAYABLE_REGION[1] + 1)) + PLAYABLE_REGION[1];
 
         this.animation_frame = [0, 0];
         this.Move_Up = false;
@@ -83,10 +90,10 @@ class Zombie {
         this.Move_Left = false;
         this.Move_Right = false;
         this.is_attacking = false;
-        this.speed = SF / 2;
+        this.speed = SF;
     }
 
-    handle_zombie_model(frame_counter) {
+    handle_model(frame_counter) {
         if (this.Move_Left) {
             this.animation_frame[1] = 1;
         } else if (this.Move_Right) {
@@ -155,6 +162,12 @@ class Zombie {
             }
         }
 
-        this.handle_zombie_model(frame_counter);
+        this.handle_model(frame_counter);
+    }
+
+    draw(WIN) {
+        WIN.drawImage(this.image,  ZOMBIE_FRAME_WIDTH * this.animation_frame[0], 
+            ZOMBIE_FRAME_HEIGHT * this.animation_frame[1], ZOMBIE_FRAME_WIDTH, ZOMBIE_FRAME_HEIGHT, 
+            this.x, this.y, this.width, this.height);
     }
 }
