@@ -1,12 +1,15 @@
 console.log("'Enemies.js' loaded.");
+// 'Enemies.js' is used to define all classes and sub-classes needed for the in-game enemies
 
 class Basic_Enemy {
     constructor() {
         this.max_health = 0; this.health = 0; this.attack = 0; this.level = 0;
+        // Invincibility frames are used for enemies to ensure they dont take too much damage too quickly
         this.invincibility_frames = 0;
         this.is_dead = false;
 
         this.walk_randomiser = Math.floor(Math.random() * (45 - 15) + 15);
+        // 'animation_frame' defines which sprite on the sprite sheet is used e.g. [0, 0] = top left sprite
         this.animation_frame = [0, 0];
         this.attack_cooldown = 0;
         this.is_attacking = false;
@@ -49,6 +52,7 @@ class Basic_Enemy {
     }
 
     update(frame_counter, player_x, player_y) {
+        // If the enemy is within a certain distance of the player, start attacking
         if ((-(SF * 20) < this.x - player_x && this.x - player_x < (SF * 20)) && (-(SF * 20) < this.y - player_y && this.y - player_y < (SF * 20))) {
             this.is_attacking = true;
         }
@@ -61,6 +65,7 @@ class Basic_Enemy {
             }
         }
 
+        // 'attack_cooldown' used instead of checking 'is_attacking' == true or false in order to let the animation finish even if the player moves away
         if (this.attack_cooldown == 0) {
             if (frame_counter % 60 > this.walk_randomiser) {
                 this.move_up_down(player_y);
@@ -125,6 +130,7 @@ class Zombie extends Basic_Enemy {
         this.speed = SF;
     }
 
+    // 'handle_model' is defined in the child class not the parent class because the size and shape of the sprite sheet may differ
     handle_model(frame_counter) {
         if (this.attack_cooldown == 0) {
             if (this.Move_Left) {
@@ -167,6 +173,7 @@ class Human extends Basic_Enemy {
         this.attack = (this.attack * 0.75).toFixed(0);
     }
 
+    // 'handle_model' is defined in the child class not the parent class because the size and shape of the sprite sheet may differ
     handle_model(frame_counter) {
         if (this.Move_Left) {
             this.animation_frame[1] = 1;

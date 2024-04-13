@@ -1,11 +1,14 @@
 console.log("'Player.js' loaded.");
+// 'Player.js' is used to define the player class and any other classes relevant to the player
 
 class Player {
     constructor() {
         this.image = PLAYER_IMAGE;
         this.width = FRAME_WIDTH * SF; this.height = FRAME_HEIGHT * SF;
+        // Dividing then multipling by SF makes sure the player is centred on the pixel
         this.x = ((WIDTH/2 - this.width/2) / SF) * SF; this.y = ((HEIGHT/2 - this.height/2) / SF) * SF;
 
+        // Invincibility frames are used for the player to ensure they dont take too much damage too quickly
         this.invincibility_frames = 0;
         this.xp_to_next_level = 100;
         this.max_health = 100;
@@ -14,6 +17,7 @@ class Player {
         this.level = 1;
         this.xp = 0;
 
+        // 'animation_frame' defines which sprite on the sprite sheet is used e.g. [0, 0] = top left sprite
         this.animation_frame = [0, 0];
         this.projectile = null;
         this.W_pressed = false;
@@ -24,10 +28,12 @@ class Player {
     }
 
     level_up() {
+        // 'difference' is used to ensure the percentage of health the player has left remains the same after level up
+        let difference = this.max_health;
         this.level ++;
-        this.health /= this.max_health;
         this.max_health = (100 * (1 + (((this.level * 1.1) - 1) / 10))).toFixed(0);
-        this.health = (this.health * this.max_health).toFixed(0);
+        this.health += +(this.max_health - difference);
+
         this.attack = (10 * (1 + (((this.level * 1.5) - 1) / 10))).toFixed(0);
         this.xp -= this.xp_to_next_level;
         this.xp_to_next_level = (100 * (1 + (((this.level * 2.25) - 1) / 10))).toFixed(0);
@@ -102,6 +108,7 @@ class Player {
 
         if (this.invincibility_frames > 0) { this.invincibility_frames --; }
         if (this.xp >= this.xp_to_next_level) { this.level_up(); }
+        // Two nested if statements are used instead of one 'if &&' because if projectile == null then trying to check projectile.is_dead will cause an error
         if (this.projectile != null) { if (this.projectile.is_dead == true) { this.projectile = null; }}
 
         return false;
@@ -163,7 +170,7 @@ class Projectile {
             if (entity_list[i].invincibility_frames == 0) {
                 if ((this.x < (entity_list[i].x + entity_list[i].width)) && ((this.x + this.width) > entity_list[i].x) && 
                 (this.y < (entity_list[i].y + entity_list[i].height)) && ((this.y + this.height) > entity_list[i].y)) {
-                    entity_list[i].health -= entity_list[0].attack;
+                    entity_list[i].health -= +(entity_list[0].attack);
                     entity_list[i].invincibility_frames = 35;
                     this.is_dead = true;
                     break;
@@ -171,6 +178,13 @@ class Projectile {
             }
         }
 
+        /*
+        This if statement checks if the projectile is colliding with any of the four walls and kills it if it is.
+        This large if statement will three || are used instead of a more simple if && statement because the projectile should
+        only be killed if it collides with the wall it is currently moving towards (hence why we check the animation frame
+        that determines the direction) and not any of the other three walls. This is because otherwise you could not
+        fire a projectile whilst standing next to a wall.
+        */
         if (((this.y < PLAYABLE_REGION[1]) && (this.animation_frame == 2)) 
         || ((this.y > PLAYABLE_REGION[3] - this.height) && (this.animation_frame == 0))
         || ((this.x < PLAYABLE_REGION[0]) && (this.animation_frame == 1))
