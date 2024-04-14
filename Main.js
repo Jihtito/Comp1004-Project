@@ -119,15 +119,15 @@ class Game {
     
         this.WIN.fillStyle = WHITE; this.WIN.textAlign = "center";
         this.WIN.font = `${28 * SF}px Arial`; this.WIN.fillText("GAME OVER", MAP_POS[0] + (175 * SF), MAP_POS[1] + (62 * SF));
-        this.WIN.font = `${14 * SF}px Arial`; this.WIN.fillText(`Your Score: ${this.wave}`, MAP_POS[0] + (175 * SF), MAP_POS[1] + (126 * SF));
-        this.WIN.font = `${8 * SF}px Arial`; this.WIN.fillText("Downloading your score to a txt file...", MAP_POS[0] + (175 * SF), MAP_POS[1] + (137 * SF));
+        this.WIN.font = `${14 * SF}px Arial`; this.WIN.fillText(`Your Score: ${this.wave}!`, MAP_POS[0] + (175 * SF), MAP_POS[1] + (126 * SF));
+        this.WIN.font = `${7.6 * SF}px Arial`; this.WIN.fillText("Downloading your stats to a json file...", MAP_POS[0] + (175 * SF), MAP_POS[1] + (137 * SF));
         this.WIN.font = `${14 * SF}px Arial`; this.WIN.fillText("Refresh the page to play again.", MAP_POS[0] + (175 * SF), MAP_POS[1] + (180 * SF));
 
-        // Creates a .txt file containing the player's score
-        let content = `Your Score = ${this.wave}!`;
-        let txt_file = new File([content], "your_score.txt", {type: "text/plain"});
+        // Creates a .json file containing the player's level, score and playtime
+        let content = `Level = ${this.player.level}! \nScore = ${this.wave}! \nPlaytime = ${Math.floor(this.frame_counter / 3600)} minute(s) and ${Math.floor((this.frame_counter / 60) % 60)} second(s)! \n\n(Playtime does not include time spent on the pause or start menu).`;
+        let txt_file = new File([content], "player_stats.json", {type: "text/plain"});
 
-        // Downloads the created .txt file
+        // Downloads the created .json file
         let link = document.createElement('a');
         let created_URL = window.URL.createObjectURL(txt_file);
 
