@@ -1,4 +1,4 @@
-**To run the game please download all files in the repo (INCLUDING EVERYTIME IN THE 'FILES' FOLDER) then simply open 'Main.html' in any web browser.**
+**To run the game please download all files in the repo (INCLUDING EVERYTIME IN THE 'Files' FOLDER AND THE FOLDER ITSELF) then simply open 'Main.html' in any web browser.**
 **When attempting to run 'Main.html' make sure all files are in the same folder location relative to each other, as they are in the repo. If one or more of the files are in the wrong place the code will not run as intended and may crash/display unintended errors**
 
 Dungeon Simulator is a single player 2d pixel art game that takes inspiration from games such as the early Legend of Zelda titles and rogue-likes such as The Binding of Isaac.
